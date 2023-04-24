@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import InputPublico from "../inputPublico";
 import Image from "next/image";
 import Link from "next/link";
 import Botao from "../botao";
 import { validarEmail, validarSenha } from "@/utils/validadores";
 import UsuarioService from "@/services/UsuarioService";
-
 import imagemEnvelope from "../../public/imagens/envelope.svg";
 import imagemChave from "../../public/imagens/chave.svg";
 import imagemLogo from "../../public/imagens/logo.svg";
 
 const usuarioService = new UsuarioService();
 
-export default function Login() {
+export default function Login({ aposAutenticacao }) {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [estaSubmetendo, setEstaSubmetendo] = useState(false);
@@ -37,8 +36,10 @@ export default function Login() {
                 login: email,
                 senha
             });
-
-            // TODO: redirecionar usuario para home
+            
+            if(aposAutenticacao) {
+                aposAutenticacao();
+            }
         } catch (error) {
             alert(
                 "Erro ao realizar login." + error?.response?.data?.erro
@@ -77,7 +78,7 @@ export default function Login() {
                         tipo="password"
                         aoAlterarValor={e => setSenha(e.target.value)}
                         valor={senha}
-                        mensagemValidacao="A senha precisa ter pelo menos 3 caracteres"
+                        mensagemValidacao="A senha precisa ter pelo menos 6 caracteres"
                         exibirMensagemValidacao={senha && !validarSenha(senha)}
                     />
 
