@@ -12,7 +12,7 @@ export default class UsuarioService extends HttpService {
         const usuario = await this.get('/usuario');
         localStorage.setItem('id', usuario.data._id);
         
-        if(usuario.data.avatar) {
+        if (usuario.data.avatar) {
             localStorage.setItem("avatar", usuario.data.avatar);
         }
     }
