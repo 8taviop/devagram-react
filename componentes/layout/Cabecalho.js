@@ -4,17 +4,27 @@ import imagemLupa from '../../public/imagens/lupa.svg';
 import Navegacao from './Navegacao';
 import { useState } from 'react';
 import ResultadoPesquisa from './ResultadoPesquisa';
+import UsuarioService from '@/services/UsuarioService';
+
+const usuarioService = new UsuarioService();
 
 export default function Cabecalho() {
     const [resultadoPesquisa, setResultadoPesquisa] = useState([]);
     const [termoPesquisado, setTermoPesquisado] = useState([]);
 
-    const aoPesquisar = (e) => {
+    const aoPesquisar = async (e) => {
         setTermoPesquisado(e.target.value);
         setResultadoPesquisa([]);
 
         if (termoPesquisado.length < 3) {
             return;
+        }
+
+        try {
+            const {data} = await usuarioService.pesquisar(termoPesquisado);
+            console.log(data);
+        } catch (error) {
+            alert('Erro ao pesquisar usuario.' + error?.response.data?.erro);
         }
 
         setResultadoPesquisa([
@@ -39,7 +49,7 @@ export default function Cabecalho() {
         ])
     }
 
-    const aoClicarResultadoPesquisa = () => {
+    const aoClicarResultadoPesquisa = (id) => {
         console.log('aoClicarResultadoPesquisa', {id});
     }
 
